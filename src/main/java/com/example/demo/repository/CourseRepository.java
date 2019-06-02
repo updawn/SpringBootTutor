@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CourseRepository {
@@ -24,6 +25,25 @@ public class CourseRepository {
         courses.add(javaOne);
     }
 
+    public void addCourse(String courseName) {
+        Course javaOne = Course.builder()
+                .className(courseName)
+                .instructor(new Instructor("stupid", "Jobs", "Phd", "TownHall201"))
+                .startDate(new Date("8/1/2018"))
+                .endDate(new Date("12/24/2018"))
+                .timeFrame("8am-10am")
+                .build();
+
+        courses.add(javaOne);
+    }
+
+    public void deleteCourse(String courseName) {
+        List<Course> OptionalExistingCourse = this.findCourseByName(courseName);
+        for(Course c : OptionalExistingCourse){
+            courses.remove(c);
+        }
+    }
+
 
     public List<Course> findAllClasses(){
         //链接数据库
@@ -38,7 +58,7 @@ public class CourseRepository {
 
     public List<Course> findCourseByName(String courseName) {
         if(courseName.equals("Java_I")) {
-            return courses;
+            return new ArrayList<>(courses);
         }
 
         return new ArrayList<Course>();
